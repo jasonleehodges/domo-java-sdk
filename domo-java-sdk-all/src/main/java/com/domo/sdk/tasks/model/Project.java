@@ -1,5 +1,7 @@
 package com.domo.sdk.tasks.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Collection;
 import java.util.Date;
 
@@ -7,6 +9,7 @@ public class Project {
     private String id;
     private String name;
     private String description;
+    @SerializedName("public")
     private Boolean isPublic;
     private Collection<Long> members;
     private Long createdBy;
@@ -45,8 +48,8 @@ public class Project {
         return isPublic;
     }
 
-    public void setPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(Boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public Collection<Long> getMembers() {
