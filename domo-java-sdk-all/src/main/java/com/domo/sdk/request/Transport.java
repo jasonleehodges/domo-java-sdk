@@ -38,7 +38,7 @@ public class Transport {
 
         try(Response response = httpClient.newCall(request).execute()) {
             if(response.code() > 399) {
-                throw new RequestException("Error making request url:"+url.toString()+" reponseBody:"+response.body().source().readUtf8());
+                throw new RequestException(response.code(), "Error making request url:"+url.toString()+" reponseBody:"+response.body().source().readUtf8());
             }
             return gson.fromJson(response.body().charStream(), type);
         } catch (IOException e) {
