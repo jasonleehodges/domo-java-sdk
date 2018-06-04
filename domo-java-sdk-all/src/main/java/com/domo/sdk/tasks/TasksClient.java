@@ -3,8 +3,10 @@ package com.domo.sdk.tasks;
 import com.domo.sdk.request.RequestException;
 import com.domo.sdk.request.Transport;
 import com.domo.sdk.request.UrlBuilder;
+import com.domo.sdk.tasks.model.Attachment;
 import com.domo.sdk.tasks.model.Project;
 import com.domo.sdk.tasks.model.ProjectList;
+import com.domo.sdk.tasks.model.Task;
 import com.google.gson.reflect.TypeToken;
 import okhttp3.HttpUrl;
 
@@ -142,5 +144,84 @@ public class TasksClient {
                 .build();
 
         transport.deleteJson(url);
+    }
+
+    public List<Task> getTasks(String projectId){
+        HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
+                .addPathSegment(projectId)
+                .addPathSegment("tasks")
+                .build();
+
+        return transport.getJson(url, new TypeToken<List<Task>>() {}.getType());
+    }
+    public List<Task> getTasks(String projectId, String listId){
+        HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
+                .addPathSegment(projectId)
+                .addPathSegment("lists")
+                .addPathSegment(listId)
+                .addPathSegment("tasks")
+                .build();
+
+        return transport.getJson(url, new TypeToken<List<Task>>() {}.getType());
+    }
+
+    public Task getTask(String projectId, String listId, String taskId){
+        HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
+                .addPathSegment(projectId)
+                .addPathSegment("lists")
+                .addPathSegment(listId)
+                .addPathSegment("tasks")
+                .addPathSegment(taskId)
+                .build();
+
+        return transport.getJson(url, new TypeToken<Task>() {}.getType());
+    }
+
+    public Task updateTask(String projectId, String listId, String taskId, Task task) {
+        HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
+                .addPathSegment(projectId)
+                .addPathSegment("lists")
+                .addPathSegment(listId)
+                .addPathSegment("tasks")
+                .addPathSegment(taskId)
+                .build();
+
+        return transport.putJson(url, task, Task.class);
+    }
+
+    public Task addTask(String projectId, String listId, Task task) {
+        HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
+                .addPathSegment(projectId)
+                .addPathSegment("lists")
+                .addPathSegment(listId)
+                .addPathSegment("tasks")
+                .build();
+
+        return transport.postJson(url, task, Task.class);
+    }
+
+    public List<Attachment> getAttachments(String projectId, String listId, String taskId){
+        HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
+                .addPathSegment(projectId)
+                .addPathSegment("lists")
+                .addPathSegment(listId)
+                .addPathSegment("tasks")
+                .addPathSegment(taskId)
+                .addPathSegment("attachments")
+                .build();
+
+        return transport.getJson(url, new TypeToken<List<Attachment>>() {}.getType());
+    }
+
+    public Attachment addAttachment(String projectId, String listId, String taskId, Attachment attachment){
+        HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
+                .addPathSegment(projectId)
+                .addPathSegment("lists")
+                .addPathSegment(listId)
+                .addPathSegment("tasks")
+                .addPathSegment(taskId)
+                .build();
+
+        return transport.postJson(url, attachment, Attachment.class);
     }
 }
