@@ -4,76 +4,59 @@ import java.util.Objects;
 
 public class Attachment {
 
-    private String created;
-    private Long creator;
-    private Long dataFileId;
     private Long id;
-    private String name;
-    private String previewImage;
     private Long taskId;
-    private String type;
-
-    public Attachment(String created, Long creator, Long dataFileId, Long id, String name, String previewImage, Long taskId, String type) {
-        this.created = created;
-        this.creator = creator;
-        this.dataFileId = dataFileId;
-        this.id = id;
-        this.name = name;
-        this.previewImage = previewImage;
-        this.taskId = taskId;
-        this.type = type;
-    }
-
-    public String getCreated() { return created; }
-
-    public void setCreated(String created) { this.created = created; }
-
-    public Long getCreator() { return creator; }
-
-    public void setCreator(Long creator) { this.creator = creator; }
-
-    public Long getDataFileId() { return dataFileId; }
-
-    public void setDataFileId(Long dataFileId) { this.dataFileId = dataFileId; }
+    private Long fileId;
+    private String createdDate;
+    private Long createdBy;
+    private String fileName;
+    private String mimeType;
 
     public Long getId() { return id; }
 
     public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
-
-    public String getPreviewImage() { return previewImage; }
-
-    public void setPreviewImage(String previewImage) { this.previewImage = previewImage; }
-
     public Long getTaskId() { return taskId; }
 
     public void setTaskId(Long taskId) { this.taskId = taskId; }
 
-    public String getType() { return type; }
+    public Long getFileId() { return fileId; }
 
-    public void setType(String type) { this.type = type; }
+    public void setFileId(Long fileId) { this.fileId = fileId; }
+
+    public String getCreatedDate() { return createdDate; }
+
+    public void setCreatedDate(String createdDate) { this.createdDate = createdDate; }
+
+    public Long getCreatedBy() { return createdBy; }
+
+    public void setCreatedBy(Long createdBy) { this.createdBy = createdBy; }
+
+    public String getFileName() { return fileName; }
+
+    public void setFileName(String fileName) { this.fileName = fileName; }
+
+    public String getMimeType() { return mimeType; }
+
+    public void setMimeType(String mimeType) { this.mimeType = mimeType; }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Attachment that = (Attachment) o;
-        return Objects.equals(created, that.created) &&
-                Objects.equals(creator, that.creator) &&
-                Objects.equals(dataFileId, that.dataFileId) &&
-                Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(previewImage, that.previewImage) &&
+        return Objects.equals(id, that.id) &&
                 Objects.equals(taskId, that.taskId) &&
-                Objects.equals(type, that.type);
+                Objects.equals(fileId, that.fileId) &&
+                Objects.equals(createdDate, that.createdDate) &&
+                Objects.equals(createdBy, that.createdBy) &&
+                Objects.equals(fileName, that.fileName) &&
+                Objects.equals(mimeType, that.mimeType);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(created, creator, dataFileId, id, name, previewImage, taskId, type);
+        return Objects.hash(id, taskId, fileId, createdDate, createdBy, fileName, mimeType);
     }
 }
