@@ -10,6 +10,10 @@ import com.domo.sdk.tasks.model.Task;
 import com.google.gson.reflect.TypeToken;
 import okhttp3.HttpUrl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 
@@ -213,6 +217,7 @@ public class TasksClient {
         return transport.getJson(url, new TypeToken<List<Attachment>>() {}.getType());
     }
 
+    // TODO: change this to actually upload an attachment - requires a new transport method
     public Attachment addAttachment(String projectId, String listId, String taskId, Attachment attachment){
         HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
                 .addPathSegment(projectId)
@@ -223,5 +228,37 @@ public class TasksClient {
                 .build();
 
         return transport.postJson(url, attachment, Attachment.class);
+    }
+
+    public void downloadAttachment(String projectId, String listId, String taskId, String attachmentId, String downloadPath){
+        HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
+                .addPathSegment(projectId)
+                .addPathSegment("lists")
+                .addPathSegment(listId)
+                .addPathSegment("tasks")
+                .addPathSegment(taskId)
+                .addPathSegment("attachments")
+                .addPathSegment(attachmentId)
+                .build();
+
+        try {
+            byte[] bytes = transport.getFile(url);
+            Path path = Paths.get(downloadPath);
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteAttachment(String projectId, String taskId, String attachmentId){
+        HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
+                .addPathSegment(projectId)
+                .addPathSegment("tasks")
+                .addPathSegment(taskId)
+                .addPathSegment("attachments")
+                .addPathSegment(attachmentId)
+                .build();
+
+        transport.deleteJson(url);
     }
 }

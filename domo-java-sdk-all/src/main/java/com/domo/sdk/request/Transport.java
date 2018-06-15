@@ -1,6 +1,5 @@
 package com.domo.sdk.request;
 
-import com.domo.sdk.pages.model.Page;
 import com.google.gson.Gson;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -140,5 +139,16 @@ public class Transport {
             throw new RequestException("Error uploading csv. url:"+url.toString(), e);
         }
 
+    }
+
+    public byte[] getFile(HttpUrl url){
+        Request request = new Request.Builder().url(url).build();
+        try {
+            Response response = httpClient.newCall(request).execute();
+            return response.body().bytes();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
