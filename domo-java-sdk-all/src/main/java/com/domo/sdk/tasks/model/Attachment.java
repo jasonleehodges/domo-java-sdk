@@ -6,7 +6,6 @@ public class Attachment {
 
     private Long id;
     private Long taskId;
-    private Long fileId;
     private String createdDate;
     private Long createdBy;
     private String fileName;
@@ -19,10 +18,6 @@ public class Attachment {
     public Long getTaskId() { return taskId; }
 
     public void setTaskId(Long taskId) { this.taskId = taskId; }
-
-    public Long getFileId() { return fileId; }
-
-    public void setFileId(Long fileId) { this.fileId = fileId; }
 
     public String getCreatedDate() { return createdDate; }
 
@@ -47,7 +42,6 @@ public class Attachment {
         Attachment that = (Attachment) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(taskId, that.taskId) &&
-                Objects.equals(fileId, that.fileId) &&
                 Objects.equals(createdDate, that.createdDate) &&
                 Objects.equals(createdBy, that.createdBy) &&
                 Objects.equals(fileName, that.fileName) &&
@@ -57,6 +51,6 @@ public class Attachment {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, taskId, fileId, createdDate, createdBy, fileName, mimeType);
+        return Objects.hash(id, taskId, createdDate, createdBy, fileName, mimeType);
     }
 }
