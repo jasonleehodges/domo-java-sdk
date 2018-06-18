@@ -9,6 +9,8 @@ import com.domo.sdk.tasks.model.ProjectList;
 import com.domo.sdk.tasks.model.Task;
 import com.google.gson.reflect.TypeToken;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -217,17 +219,17 @@ public class TasksClient {
         return transport.getJson(url, new TypeToken<List<Attachment>>() {}.getType());
     }
 
-    // TODO: change this to actually upload an attachment - requires a new transport method
-    public Attachment addAttachment(String projectId, String listId, String taskId, Attachment attachment){
+    public void addAttachment(String projectId, String listId, String taskId, String filePath){
         HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
                 .addPathSegment(projectId)
                 .addPathSegment("lists")
                 .addPathSegment(listId)
                 .addPathSegment("tasks")
                 .addPathSegment(taskId)
+                .addPathSegment("attachments")
                 .build();
 
-        return transport.postJson(url, attachment, Attachment.class);
+        transport.uploadFile(url, filePath);
     }
 
     public void downloadAttachment(String projectId, String listId, String taskId, String attachmentId, String downloadPath){

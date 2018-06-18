@@ -1,17 +1,16 @@
 package com.domo.sdk.request;
 
 import com.google.gson.Gson;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.*;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Transport {
     private final OkHttpClient httpClient;
@@ -146,6 +145,21 @@ public class Transport {
         try {
             Response response = httpClient.newCall(request).execute();
             return response.body().bytes();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void uploadFile(HttpUrl url, String filePath){
+        try {
+            File file = new File(filePath);
+            MediaType fileContentType = MediaType.parse(new MimetypesFileTypeMap().getContentType(file));
+            MultipartBody multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("file", file.getName(), RequestBody.create(fileContentType, file)).build();
+
+            Request request = new Request.Builder().url(url).post(multipartBody).build();
+            httpClient.newCall(request).execute();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
