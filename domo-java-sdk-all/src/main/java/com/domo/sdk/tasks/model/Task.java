@@ -16,7 +16,7 @@ public class Task {
     private Long createdBy;
     private Long ownedBy;
     private Set<Long> contributors;
-    private Set<Attachment> attachments;
+    private Integer attachmentCount;
     private Set<String> tags;
     private Boolean archived;
 
@@ -68,9 +68,9 @@ public class Task {
 
     public void setContributors(Set<Long> contributors) { this.contributors = contributors; }
 
-    public Set<Attachment> getAttachments() { return attachments; }
+    public Integer getAttachmentCount() { return attachmentCount; }
 
-    public void setAttachments(Set<Attachment> attachments) { this.attachments = attachments; }
+    public void setAttachmentCount(Integer attachmentCount) { this.attachmentCount = attachmentCount; }
 
     public Set<String> getTags() { return tags; }
 
@@ -97,7 +97,7 @@ public class Task {
                 Objects.equals(createdBy, task.createdBy) &&
                 Objects.equals(ownedBy, task.ownedBy) &&
                 Objects.equals(contributors, task.contributors) &&
-                Objects.equals(attachments, task.attachments) &&
+                Objects.equals(attachmentCount, task.attachmentCount) &&
                 Objects.equals(tags, task.tags) &&
                 Objects.equals(archived, task.archived);
     }
@@ -106,6 +106,6 @@ public class Task {
     public int hashCode() {
 
         return Objects.hash(id, projectId, projectListId, taskName, description, createdDate, updatedDate, dueDate,
-                priority, createdBy, ownedBy, contributors, attachments, tags, archived);
+                priority, createdBy, ownedBy, contributors, attachmentCount, tags, archived);
     }
 }
