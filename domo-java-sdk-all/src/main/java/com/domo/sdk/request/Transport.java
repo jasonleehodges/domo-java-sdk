@@ -1,12 +1,11 @@
 package com.domo.sdk.request;
 
 import com.google.gson.Gson;
+import com.sun.tools.internal.ws.wsdl.document.Output;
 import okhttp3.*;
 
 import javax.activation.MimetypesFileTypeMap;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -140,11 +139,11 @@ public class Transport {
 
     }
 
-    public byte[] getFile(HttpUrl url){
+    public InputStream getFile(HttpUrl url){
         Request request = new Request.Builder().url(url).build();
         try {
             Response response = httpClient.newCall(request).execute();
-            return response.body().bytes();
+            return new ByteArrayInputStream(response.body().bytes());
 
         } catch (IOException e) {
             throw new RuntimeException(e);

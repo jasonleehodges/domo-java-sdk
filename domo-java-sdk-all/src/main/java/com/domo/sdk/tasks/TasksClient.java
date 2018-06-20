@@ -13,6 +13,8 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -104,10 +106,12 @@ public class TasksClient {
         transport.putJson(url, userIds);
     }
 
-    public List<ProjectList> getProjectLists(String projectId) {
+    public List<ProjectList> getProjectLists(String projectId, int limit, int offset) {
         HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
                 .addPathSegment(projectId)
                 .addPathSegment("lists")
+                .addQueryParameter("limit", Integer.toString(limit))
+                .addQueryParameter("offset", Integer.toString(offset))
                 .build();
 
         return transport.getJson(url, new TypeToken<List<ProjectList>>() {}.getType());
@@ -152,20 +156,24 @@ public class TasksClient {
         transport.deleteJson(url);
     }
 
-    public List<Task> getTasks(String projectId){
+    public List<Task> getTasks(String projectId, int limit, int offset){
         HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
                 .addPathSegment(projectId)
                 .addPathSegment("tasks")
+                .addQueryParameter("limit", Integer.toString(limit))
+                .addQueryParameter("offset", Integer.toString(offset))
                 .build();
 
         return transport.getJson(url, new TypeToken<List<Task>>() {}.getType());
     }
-    public List<Task> getTasks(String projectId, String listId){
+    public List<Task> getTasks(String projectId, String listId, int limit, int offset){
         HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
                 .addPathSegment(projectId)
                 .addPathSegment("lists")
                 .addPathSegment(listId)
                 .addPathSegment("tasks")
+                .addQueryParameter("limit", Integer.toString(limit))
+                .addQueryParameter("offset", Integer.toString(offset))
                 .build();
 
         return transport.getJson(url, new TypeToken<List<Task>>() {}.getType());
@@ -206,7 +214,7 @@ public class TasksClient {
         return transport.postJson(url, task, Task.class);
     }
 
-    public List<Attachment> getAttachments(String projectId, String listId, String taskId){
+    public List<Attachment> getAttachments(String projectId, String listId, String taskId, int limit, int offset){
         HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
                 .addPathSegment(projectId)
                 .addPathSegment("lists")
@@ -214,12 +222,14 @@ public class TasksClient {
                 .addPathSegment("tasks")
                 .addPathSegment(taskId)
                 .addPathSegment("attachments")
+                .addQueryParameter("limit", Integer.toString(limit))
+                .addQueryParameter("offset", Integer.toString(offset))
                 .build();
 
         return transport.getJson(url, new TypeToken<List<Attachment>>() {}.getType());
     }
 
-    public void addAttachment(String projectId, String listId, String taskId, String filePath){
+    public void addAttachment(String projectId, String listId, String taskId, String filepath){
         HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
                 .addPathSegment(projectId)
                 .addPathSegment("lists")
@@ -229,10 +239,10 @@ public class TasksClient {
                 .addPathSegment("attachments")
                 .build();
 
-        transport.uploadFile(url, filePath);
+        transport.uploadFile(url, filepath);
     }
 
-    public void downloadAttachment(String projectId, String listId, String taskId, String attachmentId, String downloadPath){
+    public InputStream downloadAttachment(String projectId, String listId, String taskId, String attachmentId){
         HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
                 .addPathSegment(projectId)
                 .addPathSegment("lists")
@@ -243,13 +253,7 @@ public class TasksClient {
                 .addPathSegment(attachmentId)
                 .build();
 
-        try {
-            byte[] bytes = transport.getFile(url);
-            Path path = Paths.get(downloadPath);
-            Files.write(path, bytes);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return transport.getFile(url);
     }
 
     public void deleteAttachment(String projectId, String taskId, String attachmentId){
