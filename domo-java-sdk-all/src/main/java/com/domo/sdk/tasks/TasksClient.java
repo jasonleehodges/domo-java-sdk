@@ -106,6 +106,14 @@ public class TasksClient {
         transport.putJson(url, userIds);
     }
 
+    public List<ProjectList> getProjectLists(String projectId) {
+        HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
+                .addPathSegment(projectId)
+                .addPathSegment("lists")
+                .build();
+
+        return transport.getJson(url, new TypeToken<List<ProjectList>>() {}.getType());
+    }
     public List<ProjectList> getProjectLists(String projectId, int limit, int offset) {
         HttpUrl url = urlBuilder.fromPathSegments(URL_BASE)
                 .addPathSegment(projectId)
